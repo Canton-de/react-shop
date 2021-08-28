@@ -1,0 +1,6 @@
+{
+  "PORT": "5000",
+  "dbUrl": "mongodb+srv://user:user@cluster0.uxwbx.mongodb.net/Cluster0?retryWrites=true&w=majority",
+  "secretKey": "one-secret-key",
+  "filePath": "C:\\Users\\churs\\Desktop\\react-node-shop\\backend\\public\\images"
+}

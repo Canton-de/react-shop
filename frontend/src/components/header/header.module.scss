@@ -1,0 +1,48 @@
+.logo {
+  color: rgba(255, 255, 255, 0.356);
+  width: 60px;
+  font-size: 18px;
+}
+
+.sign-in {
+  color: white;
+  position: relative;
+  margin-left: auto;
+}
+.sign-in::after {
+  left: -28px;
+  top: 50%;
+  transform: translateY(-50%);
+  content: '';
+  background: url('../../images/user.png') no-repeat;
+  display: block;
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-size: cover;
+}
+.header-wrapper {
+  display: flex;
+  color: white;
+}
+.cart {
+  color: white;
+  position: relative;
+  margin-left: 40px;
+}
+.cart::after {
+  left: -28px;
+  top: 50%;
+  transform: translateY(-50%);
+  content: '';
+  background: url('../../images/cart.png') no-repeat;
+  display: block;
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-size: cover;
+}
+
+.active {
+  color: rgb(39, 93, 194);
+}

@@ -1,0 +1,16 @@
+{
+  "extends": ["airbnb-base", "eslint-config-prettier", "prettier"],
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "brace-style": ["error", "stroustrup"],
+    "comma-dangle": ["error", "never"],
+    "no-unused-vars": ["warn"],
+    "no-var": ["off"],
+    "one-var": ["off"],
+    "class-methods-use-this": "off"
+  }
+}

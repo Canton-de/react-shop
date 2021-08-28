@@ -1,0 +1,27 @@
+.slider-image {
+  width: 100px;
+}
+.title {
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.product {
+  position: relative;
+}
+.slider-image-wrapper {
+  position: relative;
+}
+.slider-image {
+  height: 50vh;
+  width: fit-content;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.cart-add {
+  display: block;
+  width: 200px;
+  height: 70px;
+  margin-left: auto;
+}

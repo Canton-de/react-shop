@@ -1,0 +1,75 @@
+.sliderItem {
+  height: 160px;
+  color: #fff;
+  line-height: 160px;
+  text-align: center;
+  background: #364d79;
+}
+
+.img {
+  height: 100%;
+}
+.title {
+  margin-bottom: 10px;
+  font-size: 16px;
+  margin-left: 5px;
+}
+.layoutItem {
+  display: flex;
+  position: relative;
+}
+
+.current-price {
+  font-size: 18px;
+  color: #fc8507;
+}
+.buy-wrapper {
+  height: 100%;
+  text-align: right;
+  position: absolute;
+  top: 3px;
+  right: 10px;
+}
+
+.product-info-wrapper {
+  padding-left: 20px;
+  width: calc(100% - 250px - 65px);
+  position: relative;
+}
+.count {
+  position: absolute;
+  display: flex;
+  top: 40%;
+  left: 50%;
+  font-size: 24px;
+}
+.counti {
+  border: 1px solid rgb(189, 181, 181);
+  border-left: none;
+  border-right: none;
+}
+.minus,
+.plus {
+  background: inherit;
+  outline: none;
+  width: 30px;
+  cursor: pointer;
+}
+.minus {
+  border: 1px solid rgb(189, 181, 181);
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+}
+.plus {
+  border: 1px solid rgb(189, 181, 181);
+  border-left: none;
+  border-radius: 0 5px 5px 0;
+}
+.minus:hover,
+.plus:hover {
+  border-color: black;
+}
+.minus:disabled,
+.plus:disabled {
+  border-color: red;
+}
