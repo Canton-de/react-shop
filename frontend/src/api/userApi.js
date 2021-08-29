@@ -52,7 +52,7 @@ class UserApi {
   }
 
   async searchProducts(category, query) {
-    const { data } = await axios.get(`/api/product/search/${category}?q=${query}`);
+    const { data } = await axios.get(`/api/product/search/${category}${query}`);
     return data;
   }
 }

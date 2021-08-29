@@ -22,9 +22,10 @@ const ProductItem = ({ product }) => {
   const goToCart = () => {
     history.push('/cart');
   };
+  console.log(product);
   return (
     <>
-      <Card>
+      <Card className={styles.product}>
         <div className={styles.layoutItem}>
           <div style={{ width: 200 }}>
             <Carousel afterChange={onChange} style={{ width: 200 }}>

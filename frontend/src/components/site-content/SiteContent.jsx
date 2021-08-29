@@ -7,6 +7,7 @@ import LoginPage from '../login-page/LoginPage';
 import Cart from '../cart/Cart';
 import Categories from '../categories/Categories';
 import WithBreadcrump from '../hocs/WithBreadcrump';
+import ProductsPage from '../products-page/ProductsPage';
 
 const { Content } = Layout;
 const SiteContent = () => {
@@ -18,7 +19,7 @@ const SiteContent = () => {
         <Route path="/home" component={Categories} />
         <Route path="/" exact component={Categories} />
         <Route path="/product/:id" component={Product} />
-        <Route path="/categories/:category" component={WithBreadcrump(ProductList, breadItems)} />
+        <Route path="/categories/:category" component={WithBreadcrump(ProductsPage, breadItems)} />
         <Route path="/sign-in" component={LoginPage} />
         <Route path="/cart" component={Cart} />
         return <div>Page Not Found</div>

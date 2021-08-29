@@ -13,3 +13,30 @@
   display: block;
   text-align: center;
 }
+.main-content {
+  display: flex;
+  align-items: flex-start;
+}
+.left-side {
+  margin-right: 45px;
+}
+.right-side {
+  flex-grow: 3;
+}
+.category-input {
+  border-radius: 3px;
+}
+.category-input:focus {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.7);
+}
+.price-filter {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.price-input::-webkit-outer-spin-button,
+.price-input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}

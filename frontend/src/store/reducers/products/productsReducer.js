@@ -1,9 +1,10 @@
-import { POPULARITY_SORT, PRICE_SORT, SET_SHOP_PRODUCTS, SHOP_PRODUCTS_LOADING } from "./constants";
+import { POPULARITY_SORT, PRICE_FILTER, PRICE_SORT, SET_SHOP_PRODUCTS, SHOP_PRODUCTS_LOADING } from "./constants";
 
 const initialState = {
     products: [],
     sort: null,
     isLoading:true,
+    count:null
 }
 
 const productsReducer = (state=initialState,action) => {
@@ -24,8 +25,16 @@ const productsReducer = (state=initialState,action) => {
             const clone = JSON.parse(JSON.stringify(state.products));
             return { ...state, products: clone.sort((a, b) => a.rates.length - b.rates.length), sort: 'popularity' };
         }
+        case PRICE_FILTER:
+
+            return {
+              ...state,
+              products: state.products.filter(
+                (product) => product.price >= action.payload.min && product.price <= action.payload.max
+              ),
+            };
         case SET_SHOP_PRODUCTS:
-            return {...state,products:action.payload,sort:null}
+            return {...state,products:action.payload.products,count:action.payload.count,sort:null}
         case SHOP_PRODUCTS_LOADING:
             return {...state,isLoading:action.payload}
         default:
