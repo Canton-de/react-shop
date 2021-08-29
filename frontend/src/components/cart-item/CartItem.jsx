@@ -6,7 +6,7 @@ import { useState } from 'react';
 import styles from './cart-item.module.scss';
 import cutString from '../../helpers/cutString';
 import userApi from '../../api/userApi';
-import { setProductsInCart } from '../../store/reducers/cartReducer';
+import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
 
 const CartItem = ({ product }) => {
   function onChange(a, b, c) {
@@ -38,7 +38,7 @@ const CartItem = ({ product }) => {
             </Carousel>
           </div>
           <div className={styles['product-info-wrapper']}>
-            <Link to={`/product/${product._id}`}>
+            <Link to={`/product/${product.product}`}>
               <span className={styles.title}>{cutString(`${product.name}`, 60)}</span>
             </Link>
           </div>

@@ -8,7 +8,7 @@ router.get('/categories/:category', authMiddleware, productController.getProduct
 router.get('/product/:id',authMiddleware, productController.getProduct)
 router.put('/rating/:id',authMiddleware, productController.rateProduct)
 router.get('/cart', authMiddleware, productCartController.getProductsInCart);
-router.post('/new', authMiddleware, productCartController.addProductToDataBase);
+router.post('/new', authMiddleware, productController.addProductToDataBase);
 router.post('/cart', authMiddleware, productCartController.addProductToCart);
 router.delete('/cart/:id', authMiddleware, productCartController.removeProductFromCart);
 router.get('/search/:category',productController.searchProducts)

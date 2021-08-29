@@ -1,13 +1,10 @@
-import userApi from "../../api/userApi";
+import { POPULARITY_SORT, PRICE_SORT, SET_SHOP_PRODUCTS, SHOP_PRODUCTS_LOADING } from "./constants";
 
 const initialState = {
     products: [],
     sort: null,
+    isLoading:true,
 }
-
-const PRICE_SORT = 'PRICE_SORT'
-const POPULARITY_SORT = 'POPULARITY_SORT'
-const SET_SHOP_PRODUCTS = 'SET_SHOP_PRODUCTS';
 
 const productsReducer = (state=initialState,action) => {
     switch (action.type) {
@@ -29,24 +26,11 @@ const productsReducer = (state=initialState,action) => {
         }
         case SET_SHOP_PRODUCTS:
             return {...state,products:action.payload,sort:null}
+        case SHOP_PRODUCTS_LOADING:
+            return {...state,isLoading:action.payload}
         default:
             return state
     }
 }
-
-const setShopProducts = products => ({type:SET_SHOP_PRODUCTS,payload:products})
-
-export const loadProducts = (categorie) => async(dispatch) => {
-    const products = await userApi.loadProducts(categorie)
-    dispatch(setShopProducts(products))
-}
-
-export const loadProductsByQuery = (query,category) => async(dispatch) => {
-    const products = await userApi.searchProducts(query, category);
-    dispatch(setShopProducts(products))
-}
-
-export const sortPrice = () => ({type:PRICE_SORT})
-export const sortPopularity = () => ({type:POPULARITY_SORT})
 
 export default productsReducer

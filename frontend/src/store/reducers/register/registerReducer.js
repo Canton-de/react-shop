@@ -1,6 +1,6 @@
-import userApi from "../../api/userApi";
-import { setUser } from './userReducer';
-import { setProductsInCart } from './cartReducer';
+import userApi from "../../../api/userApi";
+import { setProductsInCart } from "../cart/cartReducer";
+import { setUser } from '../user/userReducer';
 
 const initialState = {
     isRegistrating: false,
@@ -27,10 +27,10 @@ const setServerErrors = () => ({ type: SET_SERVER_ERRORS });
 export const registerUser = data => async (dispatch) => {
     try{
         dispatch(userRegistrating(true));
-        const {user:{email,name,_id,products},token} = await userApi.registerUser(data)
+        const {user:{email,name,_id,cart},token} = await userApi.registerUser(data)
         localStorage.setItem('token',token)
         dispatch(setUser({email,name,_id}))
-        dispatch(setProductsInCart(products));
+        dispatch(setProductsInCart(cart.products));
         dispatch(userRegistrating(false))
     }catch(e) {
         dispatch(setServerErrors())

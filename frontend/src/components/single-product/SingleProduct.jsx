@@ -1,15 +1,24 @@
+/* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Descriptions, Carousel } from 'antd';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import RateC from '../rate-c/RateC';
 import styles from './product.module.scss';
 import cutString from '../../helpers/cutString';
+import userApi from '../../api/userApi';
+import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
 
 const Product = () => {
   const [curProduct, setCurProduct] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const addToCartHandler = async () => {
+    const newProducts = await userApi.addToCart(curProduct._id);
+    dispatch(setProductsInCart(newProducts));
+  };
   useEffect(() => {
     const loadProduct = async () => {
       const { data } = await axios.get(`/api/product/product/${id}`);
@@ -42,7 +51,7 @@ const Product = () => {
             <Descriptions style={{ marginBottom: '12px' }} title="Product Info" layout="vertical" bordered>
               <Descriptions.Item label="Product">{curProduct.name}</Descriptions.Item>
               <Descriptions.Item label="Rating">
-                <RateC rating={curProduct.rating} reviewsCount={curProduct.rates.length} />
+                <RateC rating={curProduct.rating} productId={curProduct._id} reviewsCount={curProduct.rates.length} />
               </Descriptions.Item>
 
               <Descriptions.Item label="Brand">{curProduct.brand}</Descriptions.Item>
@@ -51,7 +60,7 @@ const Product = () => {
               <Descriptions.Item label="Count in stock">{curProduct.countInStock}</Descriptions.Item>
             </Descriptions>
 
-            <Button disabled={!curProduct.countInStock} className={styles['cart-add']}>
+            <Button disabled={!curProduct.countInStock} onClick={addToCartHandler} className={styles['cart-add']}>
               Add to cart
             </Button>
           </div>

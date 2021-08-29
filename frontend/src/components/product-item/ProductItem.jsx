@@ -6,7 +6,7 @@ import styles from './product-item.module.scss';
 import cutString from '../../helpers/cutString';
 import RateC from '../rate-c/RateC';
 import UserApi from '../../api/userApi';
-import { setProductsInCart } from '../../store/reducers/cartReducer';
+import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
 
 const ProductItem = ({ product }) => {
   function onChange(a, b, c) {

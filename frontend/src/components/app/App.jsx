@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import SiteContent from '../site-content/SiteContent';
 import HeaderC from '../header/HeaderC';
 import userApi from '../../api/userApi';
-import { setUser } from '../../store/reducers/userReducer';
-import { setProductsInCart } from '../../store/reducers/cartReducer';
+import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
+import { setUser } from '../../store/reducers/user/userReducer';
 
 const { Footer } = Layout;
 

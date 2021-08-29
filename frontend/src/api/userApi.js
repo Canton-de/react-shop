@@ -51,22 +51,8 @@ class UserApi {
     return data;
   }
 
-  async searchProducts(query, category) {
+  async searchProducts(category, query) {
     const { data } = await axios.get(`/api/product/search/${category}?q=${query}`);
-    return data;
-  }
-
-  async loadProducts(category) {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      const { data } = await axios.get(`/api/product/categories/${category}`);
-      return data;
-    }
-    const { data } = await axios.get(`/api/product/categories/${category}`, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
     return data;
   }
 }

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import styles from './login-page.module.scss';
-import { registerUser } from '../../store/reducers/registerReducer';
+import { registerUser } from '../../store/reducers/register/registerReducer';
 
 const LoginSchema = yup.object().shape({
   email: yup.string().email().required(),
@@ -27,52 +27,57 @@ const LoginPage = () => {
     dispatch(registerUser(data));
   };
   return (
-    <form onSubmit={handleSubmit((data) => onSubmit(data))}>
-      <div className={styles.pageWrapper}>
-        <div className={styles.page}>
-          <div className={styles.title}>Sign in</div>
-          <label htmlFor="email" className={styles.subtitle}>
-            Email address
-          </label>
-          <input
-            className={errors.email ? styles.inputError : styles.input}
-            id="email"
-            type="text"
-            placeholder="Email address"
-            {...register('email')}
-          />
-          <p className={styles.error}>{errors?.email?.message}</p>
-          <label htmlFor="password" className={styles.subtitle}>
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            className={errors.password ? styles.inputError : styles.input}
-            placeholder="Password"
-            {...register('password')}
-          />
-          <p className={styles.error}>{errors?.password?.message}</p>
-          <label htmlFor="name" className={styles.subtitle}>
-            Name
-          </label>
-          <input
-            id="name"
-            type="text"
-            className={errors.password ? styles.inputError : styles.input}
-            placeholder="Name"
-            {...register('name')}
-          />
-          <p className={styles.error}>{errors?.name?.message}</p>
-          <Button htmlType="submit" type="primary" style={{ width: '100%' }}>
-            Login
-          </Button>
-          <div className={styles.signUp}>
-            Don’t have an account? <Link to="/sign-up">Sign Up.</Link>
+    <>
+      <form>
+        <div className={styles.pageWrapper}>
+          <div className={styles.page}>
+            <div className={styles.title}>Sign in</div>
+            <label htmlFor="email" className={styles.subtitle}>
+              Email address
+            </label>
+            <input
+              className={errors.email ? styles.inputError : styles.input}
+              id="email"
+              type="text"
+              placeholder="Email address"
+              {...register('email')}
+            />
+            <p className={styles.error}>{errors?.email?.message}</p>
+            <label htmlFor="password" className={styles.subtitle}>
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              className={errors.password ? styles.inputError : styles.input}
+              placeholder="Password"
+              {...register('password')}
+            />
+            <p className={styles.error}>{errors?.password?.message}</p>
+            <label htmlFor="name" className={styles.subtitle}>
+              Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              className={errors.password ? styles.inputError : styles.input}
+              placeholder="Name"
+              {...register('name')}
+            />
+            <p className={styles.error}>{errors?.name?.message}</p>
+            <Button htmlType="submit" type="primary" style={{ width: '100%' }}>
+              Login
+            </Button>
+            <div className={styles.signUp}>
+              Don’t have an account? <Link to="/sign-up">Sign Up.</Link>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+      <button type="button" onClick={handleSubmit((data) => console.log(data))}>
+        11
+      </button>
+    </>
   );
 };
 
