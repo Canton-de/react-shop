@@ -1,6 +1,6 @@
 import userApi from "../../../api/userApi";
 import { setProductsInCart } from "../cart/cartReducer";
-import { setUser } from '../user/userReducer';
+import { setUser } from "../user/actions";
 
 const initialState = {
     isRegistrating: false,
@@ -21,7 +21,7 @@ const registerReducer = (state=initialState,action) => {
     }
 }
 
-const userRegistrating = (isRegistrating) => ({ type:USER_REGISTRATING,payload:isRegistrating })
+export const userRegistrating = (isRegistrating) => ({ type:USER_REGISTRATING,payload:isRegistrating })
 const setServerErrors = () => ({ type: SET_SERVER_ERRORS });
 
 export const registerUser = data => async (dispatch) => {

@@ -1,33 +1,4 @@
-.subtitle {
-  font-size: 14px;
-  display: block;
-}
-.input {
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #d9d9d9;
-  margin-bottom: 15px;
-}
-.input:focus {
-  outline: none;
-  border: 1.5px solid rgb(94, 46, 226);
-}
-.labelAgree {
-  color: rgb(89, 89, 89);
-  font-size: 14px;
-}
-.signUp {
-  font-size: 12px;
-  color: #8c8c8c;
-  text-align: center;
-}
-.error {
-  font-size: 14px;
-  color: red;
-}
-.inputError {
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #f5222d;
-  margin-bottom: 15px;
+.sign-type {
+  width: fit-content;
+  margin: 0 auto;
 }

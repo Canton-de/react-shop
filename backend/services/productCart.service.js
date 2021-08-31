@@ -17,8 +17,9 @@ class ProductCartService {
         name: product.name,
         image: product.images[0],
         price: product.price,
+        previousPrice: product.previousPrice,
         product: productId,
-        count: 1
+        count: 1,
       });
     }
     await cart.save()

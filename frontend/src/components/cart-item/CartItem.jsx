@@ -1,28 +1,26 @@
 /* eslint-disable no-underscore-dangle */
 import { Card, Carousel } from 'antd';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import styles from './cart-item.module.scss';
 import cutString from '../../helpers/cutString';
-import userApi from '../../api/userApi';
 import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
+import makeSeparatedPrice from '../../helpers/makeSeparatedPrice';
+import cartApi from '../../api/cartApi';
 
 const CartItem = ({ product }) => {
-  function onChange(a, b, c) {
-    return a + b + c;
-  }
   const [cartFetching, setCartFetching] = useState(false);
   const dispatch = useDispatch();
   const addToCartHandler = async () => {
     setCartFetching(true);
-    const newProducts = await userApi.addToCart(product.product);
+    const newProducts = await cartApi.addToCart(product.product);
     dispatch(setProductsInCart(newProducts));
-    setCartFetching(false);
+    return setCartFetching(false);
   };
   const removeFromCartHandler = async () => {
     setCartFetching(true);
-    const newProducts = await userApi.removeFromCart(product.product);
+    const newProducts = await cartApi.removeFromCart(product.product);
     dispatch(setProductsInCart(newProducts));
     setCartFetching(false);
   };
@@ -31,7 +29,7 @@ const CartItem = ({ product }) => {
       <Card style={{ width: '70%', marginBottom: '10px' }}>
         <div className={styles.layoutItem}>
           <div style={{ width: 200 }}>
-            <Carousel afterChange={onChange} style={{ width: 200 }}>
+            <Carousel style={{ width: 200 }}>
               <div className={styles['slider-image']}>
                 <img height="160px" src={`http://localhost:5000/images/${product.image}`} alt="product" />
               </div>
@@ -43,7 +41,7 @@ const CartItem = ({ product }) => {
             </Link>
           </div>
           <div className={styles.count}>
-            <div>{product.price} X </div>
+            <div>{makeSeparatedPrice(product.price)} *</div>
             <button disabled={cartFetching} onClick={removeFromCartHandler} className={styles.minus} type="button">
               -
             </button>
@@ -53,8 +51,9 @@ const CartItem = ({ product }) => {
             </button>
           </div>
           <div className={styles['buy-wrapper']}>
-            <div className={styles['current-price']}>{product.count * product.price} Р</div>
+            <div className={styles['current-price']}>{makeSeparatedPrice(product.count * product.price)} Р</div>
           </div>
+          <div className={styles['previous-price']}>{product.previousPrice ? `${product.previousPrice} Р` : null}</div>
         </div>
       </Card>
     </>

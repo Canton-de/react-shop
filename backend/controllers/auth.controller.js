@@ -39,11 +39,15 @@ class AuthController {
     async login (req,res) { 
         try {
             const {email,password} = req.body
-            const candidate = await User.findOne({email})
-            if(!candidate) return res.status(401).send({message:"user was not found"})
-            const isPasswordCorrect = await bcrypt.compare(password,candidate.password);
+            const user = await User.findOne({email})
+            if (!user) return res.status(401).send({ message: 'user was not found' });
+            const isPasswordCorrect = await bcrypt.compare(password,user.password);
             if(!isPasswordCorrect) return res.status(401).send({message:'incorrect password'})
-            res.send(candidate)
+            const cart = await Cart.findOne({
+              user: user._id,
+            });
+            console.log(cart)
+            res.send({ user, token: jwt.sign({ id: user._id }, config.get('secretKey')), cart });
         }catch(e) {
             console.log(e)
             res.status(500).send({message:e})

@@ -38,7 +38,7 @@ class ProductCartController {
         const candidate = await User.findById(id);
         if (!candidate) return res.status(404, { message: 'invalid token' });
         const {products} = await Cart.findOne({ user: id });
-        console.log(id)
+        console.log(products);
         res.send(products)
     } catch (e) {
       console.log(e);

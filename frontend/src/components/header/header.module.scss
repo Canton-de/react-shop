@@ -3,7 +3,15 @@
   width: 60px;
   font-size: 18px;
 }
-
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.header-hidden {
+  opacity: 0;
+  transform: translateY(-80px);
+}
 .sign-in {
   display: block;
   color: white;
@@ -84,4 +92,9 @@
 }
 .hidden {
   display: none;
+}
+.search {
+  position: absolute;
+  width: 20%;
+  left: 20%;
 }

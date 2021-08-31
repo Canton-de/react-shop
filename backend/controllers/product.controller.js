@@ -30,7 +30,6 @@ class ProductController {
 
   async rateProduct(req, res) {
     try {
-      console.log(req.body.rating);
       const { id } = req.user;
       const product = await Product.findById(req.params.id);
       const rate = product.rates.find((rate) => String(rate.user) === id);
@@ -38,10 +37,11 @@ class ProductController {
       if (rating > 5 || rating < 0.5) return res.status(403).send({ message: 'invalid rating' });
       if (!rate) {
         product.rates.push({ user: id, rating });
-        product.rating = (product.rating + rating) / product.rates.length;
+        product.rating = (product.rating * (product.rates.length-1) + rating) / product.rates.length;
         await product.save();
         return res.send(product);
       }
+      
       const diff = (rating - rate.rating) / product.rates.length;
       rate.rating = rating;
       product.rating += diff;
@@ -55,10 +55,43 @@ class ProductController {
 
   async searchProducts(req, res) {
     try {
+      const pageSize = 7
       let products;
-      console.log(req.query.q);
-      if (req.query.q === 'undefined') products = await Product.find({ category: req.params.category });
-      else products = await Product.find({ category: req.params.category, name: { $regex: req.query.q } });
+      const objToFind = {}
+      if(req.params.category !== 'search') objToFind.category = req.params.category;
+      if(req.query.price){
+        objToFind.price = { $gte: req.query.price.split('-')[0], $lte: req.query.price.split('-')[1] };
+      }
+      if (req.query.q) {
+        objToFind.name= {$regex: req.query.q}
+      }
+      const {sort} = req.query
+      if(sort) {
+        let [sortCriteria,sortDirection] = sort.split('-')
+        sortDirection = sortDirection==='y'?1:-1
+        const count = await Product.find(objToFind)
+          .sort({ [sortCriteria]: sortDirection })
+          .count();
+        products = await Product.find(objToFind)
+          .sort({ [sortCriteria]: sortDirection })
+          .skip((req.query.page - 1) * pageSize || 0)
+          .limit(pageSize);
+        return res.send({ products, count });
+      }
+      products = await Product.find(objToFind)
+        .skip((req.query.page - 1) * pageSize || 0)
+        .limit(pageSize);
+      const count = await Product.find(objToFind).count()
+      res.send({products,count});
+    } catch (e) {
+      console.log(e);
+      res.status(500).send({ message: 'server error' });
+    }
+  }
+  async getBestProducts(req, res) {
+    try {
+      let products;
+      products = await Product.find().sort({ 'rating': -1 }).limit(5);
       res.send(products);
     } catch (e) {
       console.log(e);
@@ -79,7 +112,7 @@ class ProductController {
       let images;
       if (isFileArray) images = file.map((file) => file.name);
       else images = [file.name];
-      const { name, description, category, brand, price, countInStock } = req.body;
+      const { name, description, category, brand, price, countInStock, previousPrice } = req.body;
       const product = new Product({
         name,
         description,
@@ -87,6 +120,7 @@ class ProductController {
         brand,
         price,
         countInStock,
+        previousPrice,
         images,
       });
       await product.save();

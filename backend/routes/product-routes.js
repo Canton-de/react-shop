@@ -12,5 +12,6 @@ router.post('/new', authMiddleware, productController.addProductToDataBase);
 router.post('/cart', authMiddleware, productCartController.addProductToCart);
 router.delete('/cart/:id', authMiddleware, productCartController.removeProductFromCart);
 router.get('/search/:category',productController.searchProducts)
+router.get('/best-products', productController.getBestProducts);
 
 module.exports = router

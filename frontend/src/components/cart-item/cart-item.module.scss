@@ -73,3 +73,10 @@
 .plus:disabled {
   border-color: red;
 }
+.previous-price {
+  text-decoration: line-through;
+  color: red;
+  position: absolute;
+  top: -20px;
+  right: 10px;
+}

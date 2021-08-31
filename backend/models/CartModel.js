@@ -8,6 +8,7 @@ const CartSchema = Schema({
       image: { type: String, reqired: true },
       count: { type: Number, reqired: true },
       price: { type: Number, reqired: true },
+      previousPrice: { type: Number },
       product: { type: ObjectId, ref: 'Product', reqired: true },
     },
   ],

@@ -1,12 +1,14 @@
+import { SET_USER, UNSET_USER } from "./constants";
+
 const initialState = {
     isLogged: false,
     email: null,
     name: null,
-    id: null
+    id: null,
+    type:null   
 }
 
-const SET_USER = 'SET_USER' 
-const UNSET_USER = 'UNSET_USER'; 
+
 
 const userReducer = (state = initialState,action) => {
     switch (action.type) {
@@ -18,14 +20,5 @@ const userReducer = (state = initialState,action) => {
         return state;
     }
 }
-
-export const setUser = (data) => ({
-    type: SET_USER,
-    payload:data
-})
-export const unsetUser = () => ({
-  type: UNSET_USER,
-});
-
 
 export default userReducer

@@ -1,9 +1,9 @@
 @import '~antd/dist/antd.css';
-.ant-layout-header {
-  padding: 0 150px;
-}
+$paddingFullSize: 0 150px;
+$paddingMinSize: 0 15px;
+.ant-layout-header,
 .ant-layout-content {
-  padding: 0 150px;
+  padding: $paddingFullSize;
 }
 .site-layout-content {
   padding: 24px;
@@ -37,4 +37,10 @@
 }
 .ant-rate-star {
   color: black;
+}
+@media (max-width: 800px) {
+  .ant-layout-header,
+  .ant-layout-content {
+    padding: $paddingMinSize;
+  }
 }

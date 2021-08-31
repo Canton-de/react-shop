@@ -7,8 +7,9 @@ import { useDispatch } from 'react-redux';
 import RateC from '../rate-c/RateC';
 import styles from './product.module.scss';
 import cutString from '../../helpers/cutString';
-import userApi from '../../api/userApi';
 import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
+import cartApi from '../../api/cartApi';
+import setLoginModal from '../../store/reducers/login/actions';
 
 const Product = () => {
   const [curProduct, setCurProduct] = useState({});
@@ -16,8 +17,11 @@ const Product = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const addToCartHandler = async () => {
-    const newProducts = await userApi.addToCart(curProduct._id);
-    dispatch(setProductsInCart(newProducts));
+    if (!localStorage.getItem('token')) dispatch(setLoginModal(true));
+    else {
+      const newProducts = await cartApi.addToCart(curProduct._id);
+      dispatch(setProductsInCart(newProducts));
+    }
   };
   useEffect(() => {
     const loadProduct = async () => {

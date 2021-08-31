@@ -1,15 +1,17 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable no-nested-ternary */
-import { Button, Input, Spin, Pagination } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { Button, Input, Spin, Pagination, InputNumber } from 'antd';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router';
 import { SyncOutlined } from '@ant-design/icons';
 import ProductItem from '../product-item/ProductItem';
-import { filterPrice, loadProducts, sortPopularity, sortPrice } from '../../store/reducers/products/actions';
+import { loadProducts } from '../../store/reducers/products/actions';
 import styles from './product-list.module.scss';
 
 import changeQuery from '../../helpers/changeQuery';
+import returnExactQuery from '../../helpers/returnExactQuery';
 
 const { Search } = Input;
 
@@ -19,51 +21,59 @@ const ProductList = () => {
   const { products, sort, isLoading, count } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   const query = useLocation();
+  const curSort = returnExactQuery(query.search, 'sort')?.[1];
+  const curQ = returnExactQuery(query.search, 'q');
+  const priceFilterFromQ = returnExactQuery(query.search, 'price')?.[1];
+  const curPageFromQ = returnExactQuery(query.search, 'page')?.[1];
+  const [value, setValue] = useState('');
   const history = useHistory();
-  const [page, setPage] = useState(1);
   const { category } = useParams();
-  const [minPriceFilter, setMinPriceFilter] = useState(Math.min(...products.map((product) => product.price)));
-  const [maxPriceFilter, setMaxPriceFilter] = useState(Math.max(...products.map((product) => product.price)));
+  const [minPriceFilter, setMinPriceFilter] = useState(priceFilterFromQ && priceFilterFromQ?.split('-')[0]);
+  const [maxPriceFilter, setMaxPriceFilter] = useState(priceFilterFromQ && priceFilterFromQ?.split('-')[1]);
   useEffect(() => {
     const { search } = query;
-    dispatch(loadProducts(category, search));
+    dispatch(loadProducts(category || 'search', search));
+    setValue(curQ?.[1]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [query.search]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSearch = (q) => {
-    history.push(`${query.pathname}${changeQuery('q', q, query.search.slice(1).split('&'))}`.replace(/page=\w+&?/, ''));
+    history.push(`${changeQuery('q', q, query.search.slice(1).split('&'))}`.replace(/page=\w+&?/, ''));
   };
   const handlePriceChange = () => {
     history.push(
       `${query.pathname}${changeQuery(
         'price',
-        `${minPriceFilter}-${maxPriceFilter}`,
+        `${minPriceFilter || 0}-${maxPriceFilter || 1000}`,
         query.search.slice(1).split('&')
       )}`
     );
   };
   const sortHandler = (sortType) => {
-    if (sortType === 'price') return dispatch(sortPrice());
-    return dispatch(sortPopularity());
+    history.push(`${changeQuery('sort', sortType, query.search.slice(1).split('&'))}`);
   };
   const pageChangeHandler = (paginationPage) => {
-    history.push(`${query.pathname}${changeQuery('page', paginationPage, query.search.slice(1).split('&'))}`);
+    history.push(`${changeQuery('page', paginationPage, query.search.slice(1).split('&'))}`);
   };
   return (
     <div className="site-layout-content">
       {!isLoading && (
         <>
           <div className={styles['sort-buttons']}>
-            <button className={styles['sort-button']} onClick={() => sortHandler('price')} type="button">
-              price {sort === 'price' ? <span>&uarr;</span> : sort === 'price_reverse' ? <span> &darr;</span> : null}
+            <button
+              className={styles['sort-button']}
+              onClick={() => sortHandler(curSort === 'price-y' ? 'price-n' : 'price-y')}
+              type="button"
+            >
+              price {curSort === 'price-y' ? <span>&uarr;</span> : curSort === 'price-n' ? <span> &darr;</span> : null}
             </button>
-            <button className={styles['sort-button']} onClick={() => sortHandler('popularity')} type="button">
-              popularity{' '}
-              {sort === 'popularity' ? (
-                <span>&uarr;</span>
-              ) : sort === 'popularity_reverse' ? (
-                <span> &darr;</span>
-              ) : null}
+            <button
+              className={styles['sort-button']}
+              onClick={() => sortHandler(curSort === 'rating-n' ? 'rating-y' : 'rating-n')}
+              type="button"
+            >
+              rating{' '}
+              {curSort === 'rating-y' ? <span>&uarr;</span> : curSort === 'rating-n' ? <span> &darr;</span> : null}
             </button>
           </div>
         </>
@@ -71,23 +81,29 @@ const ProductList = () => {
       <div className={styles['main-content']}>
         <>
           <div className={styles['left-side']}>
-            <Search placeholder="input search text" onSearch={onSearch} enterButton />
+            {query.pathname.slice(1) !== 'search' && (
+              <Search
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Поиск по категории"
+                onSearch={onSearch}
+                enterButton
+              />
+            )}
             <div>Цена</div>
             <div className={styles['price-filter']}>
-              <Input
+              <InputNumber
                 prefix="от"
-                onChange={(e) => setMinPriceFilter(e.target.value)}
-                value={minPriceFilter}
+                onChange={(v) => setMinPriceFilter(v)}
+                defaultValue={minPriceFilter || 0}
                 style={{ width: '48%' }}
-                className={styles['price-input']}
                 type="number"
               />
-              <Input
+              <InputNumber
                 prefix="до"
-                onChange={(e) => setMaxPriceFilter(e.target.value)}
-                value={maxPriceFilter}
+                onChange={(v) => setMaxPriceFilter(v)}
+                value={maxPriceFilter || 1000}
                 style={{ width: '48%' }}
-                className={styles['price-input']}
                 type="number"
               />
             </div>
@@ -102,13 +118,21 @@ const ProductList = () => {
           ) : (
             <div className={styles['right-side']}>
               {products.map((product) => (
-                <ProductItem product={product} key={product.id} />
+                <ProductItem product={product} key={product._id} />
               ))}
             </div>
           )}
         </>
       </div>
-      <Pagination current={query} onChange={pageChangeHandler} total={count} defaultPageSize="7" />
+      {!!count && (
+        <Pagination
+          style={{ textAlign: 'center' }}
+          current={+curPageFromQ || 1}
+          onChange={pageChangeHandler}
+          total={count}
+          defaultPageSize="7"
+        />
+      )}
     </div>
   );
 };

@@ -4,22 +4,14 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import SiteContent from '../site-content/SiteContent';
 import HeaderC from '../header/HeaderC';
-import userApi from '../../api/userApi';
-import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
-import { setUser } from '../../store/reducers/user/userReducer';
+import { authUser } from '../../store/reducers/user/actions';
 
 const { Footer } = Layout;
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    const authUser = async () => {
-      const { email, name, _id } = await userApi.authUser();
-      dispatch(setUser({ email, name, _id }));
-      const products = await userApi.getProductsInCard();
-      dispatch(setProductsInCart(products));
-    };
-    authUser();
+    dispatch(authUser());
   }, []);
   return (
     <div className="app">
