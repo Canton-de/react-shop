@@ -35,7 +35,7 @@ const ProductItem = ({ product }) => {
             <Carousel afterChange={onChange} style={{ width: 200 }}>
               {product.images.map((image) => (
                 <div key={image} className={styles['slider-image']}>
-                  <img height="160px" src={`http://localhost:5000/images/${image}`} alt="product" />
+                  <img height="160px" src={`/images/${image}`} alt="product" />
                 </div>
               ))}
             </Carousel>

@@ -42,6 +42,7 @@ class ImageLoader extends React.Component {
     const { previewVisible, previewImage, previewTitle } = this.state;
     const { handleChange, fileList } = this.props;
     const { length } = fileList;
+    console.log(fileList);
     const uploadButton = (
       <div>
         <PlusOutlined />
@@ -55,7 +56,7 @@ class ImageLoader extends React.Component {
           customRequest={this.dummyRequest}
           accept=".png,.jpg,.jpeg"
           listType="picture-card"
-          fileList={this.fileList}
+          fileList={length === 0 ? [] : fileList}
           onPreview={this.handlePreview}
           onChange={handleChange}
         >

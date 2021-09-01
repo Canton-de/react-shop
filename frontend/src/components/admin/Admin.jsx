@@ -4,19 +4,43 @@ import { useHistory } from 'react-router';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Modal } from 'antd';
 import ImageLoader from '../image-loader/ImageLoader';
 import adminApi from '../../api/adminApi';
 import styles from './amin.module.scss';
 import InputUseForm from '../import-use-form/InputUseForm';
 
+function warning() {
+  Modal.warning({
+    title: 'Warning message',
+    content: 'You have to upload at least 1 image',
+  });
+}
+
+function success() {
+  let secondsToGo = 3;
+  const modal = Modal.success({
+    title: 'Товар был успешно добавлен',
+    content: `Это сообщение закроется через ${secondsToGo} секунд.`,
+  });
+  const timer = setInterval(() => {
+    secondsToGo -= 1;
+    modal.update({
+      content: `Это сообщение закроется через ${secondsToGo} секунд.`,
+    });
+  }, 1000);
+  setTimeout(() => {
+    clearInterval(timer);
+    modal.destroy();
+  }, secondsToGo * 1000);
+}
 const productSchema = yup.object().shape({
   name: yup.string().min(1).max(15).required(),
   description: yup.string().min(1).max(50).required(),
-  price: yup.number().required(),
-  previousPrice: yup.number(),
+  price: yup.number().min(1).required(),
   category: yup.string().min(1).max(15).required(),
   brand: yup.string().min(1).max(15).required(),
-  countInStock: yup.number().required(),
+  countInStock: yup.number().min(1).required(),
 });
 const Admin = () => {
   const { userType } = useSelector((store) => store.user);
@@ -26,12 +50,24 @@ const Admin = () => {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm({
     mode: 'all',
     resolver: yupResolver(productSchema),
   });
   const handleChange = ({ fileList }) => {
     setFileList(fileList);
+  };
+
+  const handleSubmitData = (data) => {
+    if (fileList.length === 0) {
+      warning();
+    } else {
+      adminApi.addToDataBase(data, fileList);
+      reset();
+      setFileList((list) => []);
+      success();
+    }
   };
 
   useEffect(() => {
@@ -44,16 +80,12 @@ const Admin = () => {
       <div className={styles.form}>
         <InputUseForm name="name" register={register} error={errors.name} type="text" />
         <InputUseForm name="description" register={register} error={errors.description} type="text" />
-        <InputUseForm name="price" register={register} error={errors.price} type="number" />
-        <InputUseForm name="previousPrice" register={register} error={errors.previousPrice} type="number" />
+        <InputUseForm name="price" register={register} error={errors.price} type="number" min="0" />
+        <InputUseForm name="previousPrice" register={register} error={errors.previousPrice} type="number" min="0" />
         <InputUseForm name="category" register={register} error={errors.category} type="text" />
         <InputUseForm name="brand" register={register} error={errors.brand} type="text" />
-        <InputUseForm name="countInStock" register={register} error={errors.countInStock} type="number" />
-        <button
-          onClick={handleSubmit((data) => adminApi.addToDataBase(data, fileList))}
-          type="submit"
-          style={{ width: '100%' }}
-        >
+        <InputUseForm name="countInStock" register={register} error={errors.countInStock} type="number" min="1" />
+        <button onClick={handleSubmit((data) => handleSubmitData(data))} type="submit" style={{ width: '100%' }}>
           Добавить
         </button>
       </div>

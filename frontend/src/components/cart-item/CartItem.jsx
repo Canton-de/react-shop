@@ -31,7 +31,7 @@ const CartItem = ({ product }) => {
           <div style={{ width: 200 }}>
             <Carousel style={{ width: 200 }}>
               <div className={styles['slider-image']}>
-                <img height="160px" src={`http://localhost:5000/images/${product.image}`} alt="product" />
+                <img height="160px" src={`/images/${product.image}`} alt="product" />
               </div>
             </Carousel>
           </div>

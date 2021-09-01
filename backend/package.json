@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint ./",
     "lint:fix": "eslint ./src --fix",
-    "start": "nodemon index",
+    "start": "node index",
+    "startDev": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +20,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
+    "express-validator": "^6.12.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.0.1",
     "mongoose": "^5.13.5"

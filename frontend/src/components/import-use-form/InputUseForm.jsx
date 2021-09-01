@@ -1,11 +1,12 @@
 import styles from './input-use-form.module.scss';
 
-const InputUseForm = ({ register, name, error, type }) => (
+const InputUseForm = ({ register, name, error, type, ...rest }) => (
   <>
     <label htmlFor="name" className={styles.subtitle}>
       {name}
     </label>
     <input
+      {...rest}
       id={name}
       type={type}
       className={error ? styles.inputError : styles.input}

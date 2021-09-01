@@ -1,9 +1,8 @@
 const Product = require('../models/Product');
-const config = require('config');
-const productService = require('../services/product.service.js');
 const colors = require('colors');
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
+const path = require('path');
 
 class ProductController {
   async getProducts(req, res) {
@@ -113,25 +112,17 @@ class ProductController {
       }
       const {files} = req
       let images = Object.values(files).map((file) => file.name);
-      const { name, description, category, brand, price, countInStock, previousPrice } = req.body;
-      const product = new Product({
-        name,
-        description,
-        category,
-        brand,
-        price,
-        countInStock,
-        previousPrice,
-        images,
-      });
+      const { name, description, category, brand, price, countInStock,previousPrice } = req.body;
+      const newObject = { name, description, category, brand, price, countInStock, images}
+      if(+previousPrice!==0) newObject.previousPrice = previousPrice
+      const product = new Product(newObject);
       await product.save();
       for(let i in files){
-        console.log(i);
-        await files[i].mv(`${config.get('filePath')}\\${files[i].name}`);
+        await files[i].mv(path.resolve(req.filePath, files[i].name));
       }
       res.send(product);
     } catch (e) {
-      console.log(`Error ${e} qqqq`.red.underline.bold);
+      console.log(`Error ${e}`.red.underline.bold);
       res.status(500).send({ message: e });
     }
   }
