@@ -1,1 +1,17 @@
-
+.button {
+  width: 100%;
+  background: #0544d4;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 30px;
+  color: white;
+}
+.error {
+  color: red;
+}
+.disabled {
+  background: grey;
+  cursor: auto;
+}

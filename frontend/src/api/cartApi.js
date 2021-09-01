@@ -1,11 +1,16 @@
 import axios from 'axios';
+import serverUrl from "../helpers/serverUrl";
+
+const instance = axios.create({
+  baseURL: serverUrl(),
+});
 
 class CartApi {
   async addToCart(id) {
     if (!localStorage.getItem('token')) {
       return localStorage.setItem('products', id);
     }
-    const { data } = await axios.post(
+    const { data } = await instance.post(
       '/api/product/cart',
       {
         productId: id,
@@ -20,7 +25,7 @@ class CartApi {
   }
 
   async removeFromCart(id) {
-    const { data } = await axios.delete(`/api/product/cart/${id}`, {
+    const { data } = await instance.delete(`/api/product/cart/${id}`, {
       headers: {
         Authorization: `Token ${localStorage.getItem('token')}`,
       },
@@ -29,7 +34,7 @@ class CartApi {
   }
 
   async getProductsInCard() {
-    const { data } = await axios.get('/api/product/cart', {
+    const { data } = await instance.get('/api/product/cart', {
       headers: {
         Authorization: `Token ${localStorage.getItem('token')}`,
       },

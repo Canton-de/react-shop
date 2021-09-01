@@ -13,9 +13,9 @@ router.post(
   '/new',
   [
     check('name', 'name must be 1-15 length').isLength({ min: 1, max: 15 }),
-    check('description', 'description must be 1-50 length').isLength({ min: 1, max: 50 }),
-    check('brand', 'brand must be 1-15 length').isLength({ min: 1, max: 15 }),
-    check('category', 'category must be 1-15 length').isLength({ min: 1, max: 15 }),
+    check('description', 'description must be 1-50 length').isLength({ min: 1, max: 250 }),
+    check('brand', 'brand must be 1-15 length').isLength({ min: 1, max: 25 }),
+    check('category', 'category must be 1-15 length').isLength({ min: 1, max: 25 }),
   ],
   authMiddleware,
   productController.addProductToDataBase

@@ -4,11 +4,11 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import CartItem from '../cart-item/CartItem';
-import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
 import makeSeparatedPrice from '../../helpers/makeSeparatedPrice';
 import styles from './cart.module.scss';
 import cartApi from '../../api/cartApi';
 import getTokenClient from '../../helpers/getTokenClient';
+import { setProductsInCart } from '../../store/reducers/cart/actions';
 
 const declOfNum = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];
@@ -33,7 +33,7 @@ const Cart = () => {
   return (
     <div className="site-layout-content">
       {products.map((product) => (
-        <div>
+        <div key={product._id}>
           <CartItem product={product} />
         </div>
       ))}

@@ -14,13 +14,12 @@ class ProductCartController {
       res.send(cart.products);
     } catch (e) {
       console.log(`Error ${e}`.red.underline.bold);
-      return res.status(500).send({ message: e });
+      return res.status(500).send('error');
     }
   }
 
   async removeProductFromCart(req, res) {
     try {
-      console.log(req.params)
       const { id } = req.user;
       const candidate = await User.findById(id);
       if (!candidate) return res.status(404, { message: 'invalid token' });
@@ -38,11 +37,10 @@ class ProductCartController {
         const candidate = await User.findById(id);
         if (!candidate) return res.status(404, { message: 'invalid token' });
         const {products} = await Cart.findOne({ user: id });
-        console.log(products);
         res.send(products)
     } catch (e) {
       console.log(e);
-      res.status(500).send({ message: e });
+      res.status(500).send('error');
     }
   }
 }

@@ -66,6 +66,7 @@ $bottom: -10px;
   margin-left: auto;
   border-radius: 5px;
   transition: box-shadow 0.5s ease;
+  height: fit-content;
   &:hover {
     box-shadow: 0 2px 6px 0 #001529;
   }
@@ -78,13 +79,17 @@ $bottom: -10px;
   .layoutItem {
     flex-direction: column;
   }
-  .product {
-    height: fit-content;
-  }
 }
 @media (max-width: 950px) {
   .product-info-wrapper {
     width: 100%;
     margin-bottom: 75px;
+  }
+  .title {
+    display: block;
+    margin-bottom: 25px;
+  }
+  .rate-c {
+    bottom: -40px;
   }
 }

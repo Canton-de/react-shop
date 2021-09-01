@@ -1,19 +1,16 @@
-/* eslint-disable no-underscore-dangle */
 import { Card, Carousel, Button } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './product-item.module.scss';
 import cutString from '../../helpers/cutString';
 import RateC from '../rate-c/RateC';
-import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
 import makeSeparatedPrice from '../../helpers/makeSeparatedPrice';
 import cartApi from '../../api/cartApi';
-import setLoginModal from '../../store/reducers/login/actions';
+import { setLoginModal } from '../../store/reducers/login/actions';
+import { setProductsInCart } from '../../store/reducers/cart/actions';
+import serverUrl from '../../helpers/serverUrl';
 
 const ProductItem = ({ product }) => {
-  function onChange(a, b, c) {
-    return a + b + c;
-  }
   const { products: productsInCart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -32,10 +29,10 @@ const ProductItem = ({ product }) => {
       <Card className={styles.product}>
         <div className={styles.layoutItem}>
           <div style={{ width: 200 }}>
-            <Carousel afterChange={onChange} style={{ width: 200 }}>
+            <Carousel style={{ width: 200 }}>
               {product.images.map((image) => (
                 <div key={image} className={styles['slider-image']}>
-                  <img height="160px" src={`/images/${image}`} alt="product" />
+                  <img height="160px" src={`${serverUrl()}/images/${image}`} alt="product" />
                 </div>
               ))}
             </Carousel>

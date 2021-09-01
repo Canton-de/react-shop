@@ -1,17 +1,16 @@
-import userApi from '../../../api/userApi';
-import SET_MODAL from './constants';
+import { SET_SERVER_ERRORS } from "./constants";
 import { setUser } from "../user/actions";
-import { setServerErrors } from "../register/actions";
 import { setProductsInCart } from "../cart/actions";
+import userApi from '../../../api/userApi';
 
-export const setLoginModal = (payload) => ({ type: SET_MODAL,payload });
-export const loginUser = (data) => async (dispatch) => {
+export const setServerErrors = (error) => ({ type: SET_SERVER_ERRORS,payload:error });
+
+export const registerUser = (data) => async (dispatch) => {
   try {
     const {
-      user: { email, name, _id, type: userType },
+      user: { email, name, _id, cart, type: userType },
       token,
-      cart,
-    } = await userApi.loginUser(data);
+    } = await userApi.registerUser(data);
     localStorage.setItem('token', token);
     dispatch(setUser({ email, name, _id, userType }));
     dispatch(setProductsInCart(cart.products));

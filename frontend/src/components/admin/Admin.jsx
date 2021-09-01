@@ -17,6 +17,13 @@ function warning() {
   });
 }
 
+function error(errors) {
+  Modal.error({
+    title: 'Error message',
+    content: errors?.map((error) => <div className={styles.error}>{error}</div>),
+  });
+}
+
 function success() {
   let secondsToGo = 3;
   const modal = Modal.success({
@@ -36,16 +43,17 @@ function success() {
 }
 const productSchema = yup.object().shape({
   name: yup.string().min(1).max(15).required(),
-  description: yup.string().min(1).max(50).required(),
+  description: yup.string().min(1).max(250).required(),
   price: yup.number().min(1).required(),
-  category: yup.string().min(1).max(15).required(),
-  brand: yup.string().min(1).max(15).required(),
+  category: yup.string().min(1).max(25).required(),
+  brand: yup.string().min(1).max(25).required(),
   countInStock: yup.number().min(1).required(),
 });
 const Admin = () => {
   const { userType } = useSelector((store) => store.user);
   const history = useHistory();
   const [fileList, setFileList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     handleSubmit,
     register,
@@ -63,10 +71,20 @@ const Admin = () => {
     if (fileList.length === 0) {
       warning();
     } else {
-      adminApi.addToDataBase(data, fileList);
-      reset();
-      setFileList((list) => []);
-      success();
+      const loadProduct = async () => {
+        try {
+          setIsLoading(true);
+          await adminApi.addToDataBase(data, fileList);
+          reset();
+          setFileList([]);
+          success();
+        } catch (e) {
+          error(e.response?.data?.errors?.map((err) => err.msg));
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      loadProduct();
     }
   };
 
@@ -85,7 +103,12 @@ const Admin = () => {
         <InputUseForm name="category" register={register} error={errors.category} type="text" />
         <InputUseForm name="brand" register={register} error={errors.brand} type="text" />
         <InputUseForm name="countInStock" register={register} error={errors.countInStock} type="number" min="1" />
-        <button onClick={handleSubmit((data) => handleSubmitData(data))} type="submit" style={{ width: '100%' }}>
+        <button
+          disabled={isLoading}
+          onClick={handleSubmit((data) => handleSubmitData(data))}
+          type="submit"
+          className={`${styles.button} ${isLoading ? styles.disabled : null}`}
+        >
           Добавить
         </button>
       </div>

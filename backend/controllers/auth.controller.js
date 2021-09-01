@@ -15,7 +15,7 @@ class AuthController {
             const {email,name,password,type} = req.body;
             const candidate = await User.findOne({email})
             if(candidate) {
-                return res.status(401).send({message:"user  already exists"})
+                return res.status(401).send({message:"user already exists"})
             }
             const hashedPassword = await bcrypt.hash(password,7)
             const user = new User({
@@ -46,7 +46,6 @@ class AuthController {
             const cart = await Cart.findOne({
               user: user._id,
             });
-            console.log(cart)
             res.send({ user, token: jwt.sign({ id: user._id }, config.get('secretKey')), cart });
         }catch(e) {
             console.log(e)

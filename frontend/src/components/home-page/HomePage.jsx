@@ -1,4 +1,4 @@
-import { Button, Carousel, Spin } from 'antd';
+import { Carousel } from 'antd';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import shopApi from '../../api/shopApi';
@@ -23,7 +23,7 @@ const HomePage = () => {
       {isProductsLoading ? (
         <Loader />
       ) : (
-        <Carousel autoplay pauseOnHover={false} pauseOnDotsHover speed="800" autoplaySpeed={2000}>
+        <Carousel autoplay pauseOnHover={false} pauseOnDotsHover speed="800" autoplaySpeed={3000}>
           {bestProducts.map((el) => (
             <ProductItem product={el} />
           ))}

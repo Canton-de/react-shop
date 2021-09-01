@@ -1,9 +1,8 @@
+import { SET_PRODUCTS_IN_CART, UNSET_PRODUCTS_IN_CART } from "./constants";
+
 const initialState = {
     products: []
 }
-
-const SET_PRODUCTS_IN_CART = 'SET_PRODUCTS_IN_CART';
-const UNSET_PRODUCTS_IN_CART = 'UNSET_PRODUCTS_IN_CART';
 
 const cartReducer = (state=initialState,action) => {
     switch (action.type) {
@@ -15,8 +14,5 @@ const cartReducer = (state=initialState,action) => {
         return state;
     }
 }
-
-export const setProductsInCart = (products) => ({ type: SET_PRODUCTS_IN_CART, payload: products });
-export const unsetProductsInCart = () => ({ type: UNSET_PRODUCTS_IN_CART});
 
 export default cartReducer

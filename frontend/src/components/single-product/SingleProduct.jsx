@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Descriptions, Carousel } from 'antd';
@@ -7,9 +6,11 @@ import { useDispatch } from 'react-redux';
 import RateC from '../rate-c/RateC';
 import styles from './product.module.scss';
 import cutString from '../../helpers/cutString';
-import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
 import cartApi from '../../api/cartApi';
-import setLoginModal from '../../store/reducers/login/actions';
+import { setLoginModal } from '../../store/reducers/login/actions';
+import { setProductsInCart } from '../../store/reducers/cart/actions';
+import Loader from '../loader/Loader';
+import serverUrl from '../../helpers/serverUrl';
 
 const Product = () => {
   const [curProduct, setCurProduct] = useState({});
@@ -25,7 +26,7 @@ const Product = () => {
   };
   useEffect(() => {
     const loadProduct = async () => {
-      const { data } = await axios.get(`/api/product/product/${id}`);
+      const { data } = await axios.get(`${serverUrl()}api/product/product/${id}`);
       setCurProduct(data);
       setIsLoaded(true);
     };
@@ -33,16 +34,18 @@ const Product = () => {
   }, [id]);
   return (
     <div className="site-layout-content">
-      {isLoaded && (
+      {!isLoaded ? (
+        <Loader />
+      ) : (
         <div className={styles.product}>
-          <div className={styles.title}>{cutString(`${curProduct.name}`, 60)}</div>
+          <div className={styles.title}>{cutString(`${curProduct?.name}`, 60)}</div>
           <div className={styles.layoutItem}>
             <div>
               <Carousel>
-                {curProduct.images.map((image) => (
+                {curProduct.images?.map((image) => (
                   <>
                     <div className={styles['slider-image-wrapper']}>
-                      <img className={styles['slider-image']} src={`/images/${image}`} alt="product" />
+                      <img className={styles['slider-image']} src={`${serverUrl()}/images/${image}`} alt="product" />
                     </div>
                   </>
                 ))}
@@ -51,7 +54,7 @@ const Product = () => {
             <Descriptions style={{ marginBottom: '12px' }} title="Product Info" layout="vertical" bordered>
               <Descriptions.Item label="Product">{curProduct.name}</Descriptions.Item>
               <Descriptions.Item label="Rating">
-                <RateC rating={curProduct.rating} productId={curProduct._id} reviewsCount={curProduct.rates.length} />
+                <RateC rating={curProduct.rating} productId={curProduct._id} reviewsCount={curProduct?.rates?.length} />
               </Descriptions.Item>
 
               <Descriptions.Item label="Brand">{curProduct.brand}</Descriptions.Item>

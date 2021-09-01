@@ -1,22 +1,32 @@
-/* eslint-disable no-underscore-dangle */
-import { Card, Carousel } from 'antd';
+import { Card, Carousel, Modal } from 'antd';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import styles from './cart-item.module.scss';
 import cutString from '../../helpers/cutString';
-import { setProductsInCart } from '../../store/reducers/cart/cartReducer';
 import makeSeparatedPrice from '../../helpers/makeSeparatedPrice';
 import cartApi from '../../api/cartApi';
+import { setProductsInCart } from '../../store/reducers/cart/actions';
+import serverUrl from '../../helpers/serverUrl';
 
+function error() {
+  Modal.error({
+    title: 'We have not more items',
+  });
+}
 const CartItem = ({ product }) => {
   const [cartFetching, setCartFetching] = useState(false);
   const dispatch = useDispatch();
   const addToCartHandler = async () => {
-    setCartFetching(true);
-    const newProducts = await cartApi.addToCart(product.product);
-    dispatch(setProductsInCart(newProducts));
-    return setCartFetching(false);
+    try {
+      setCartFetching(true);
+      const newProducts = await cartApi.addToCart(product.product);
+      dispatch(setProductsInCart(newProducts));
+      setCartFetching(false);
+    } catch (e) {
+      error();
+      setCartFetching(false);
+    }
   };
   const removeFromCartHandler = async () => {
     setCartFetching(true);
@@ -26,12 +36,12 @@ const CartItem = ({ product }) => {
   };
   return (
     <>
-      <Card style={{ width: '70%', marginBottom: '10px' }}>
+      <Card className={styles['cart-item']}>
         <div className={styles.layoutItem}>
           <div style={{ width: 200 }}>
             <Carousel style={{ width: 200 }}>
               <div className={styles['slider-image']}>
-                <img height="160px" src={`/images/${product.image}`} alt="product" />
+                <img height="160px" src={`${serverUrl()}/images/${product.image}`} alt="product" />
               </div>
             </Carousel>
           </div>

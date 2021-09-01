@@ -9,7 +9,7 @@ class ProductCartService {
     const productInCart = productsInCart.find((p) => String(p.product)===productId );
     const product = await Product.findById(productId);
     if (productInCart){
-      if(productInCart.count + 1 > product.countInStock) return cart;
+      if(productInCart.count + 1 > product.countInStock) throw new Error('We have not more items');
       productInCart.count += 1;
     }
     else {

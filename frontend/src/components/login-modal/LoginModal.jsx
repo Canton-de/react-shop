@@ -5,11 +5,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Radio } from 'antd';
-import { registerUser } from '../../store/reducers/register/registerReducer';
 import SignUp from '../sign-up/SignUp';
 import SignIn from '../sign-in/SignIn';
 import styles from './login-modal.module.scss';
-import { loginUser } from '../../store/reducers/login/actions';
+import { loginUser, setLoginModal } from '../../store/reducers/login/actions';
+import { registerUser, setServerErrors } from '../../store/reducers/register/actions';
 
 const SignUpSchema = yup.object().shape({
   email: yup.string().email().required(),
@@ -22,7 +22,8 @@ const SignInSchema = yup.object().shape({
   password: yup.string().min(3).max(12).required(),
 });
 const LoginModal = ({ handleCancel, isOpen }) => {
-  const { isRegistrating } = useSelector((state) => state.register);
+  const { serverErrors } = useSelector((state) => state.register);
+  const { isLogged } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [signType, setSignType] = useState('sign-in');
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -43,8 +44,8 @@ const LoginModal = ({ handleCancel, isOpen }) => {
     resolver: yupResolver(SignInSchema),
   });
   const handleSignUp = (data) => {
-    setConfirmLoading(true);
     dispatch(registerUser(data));
+    setConfirmLoading(true);
   };
   const handleSignIn = (data) => {
     setConfirmLoading(true);
@@ -52,12 +53,19 @@ const LoginModal = ({ handleCancel, isOpen }) => {
   };
 
   useEffect(() => {
-    if (!isRegistrating) {
+    if (serverErrors) {
+      setConfirmLoading(false);
+      setServerErrors(null);
+      setLoginModal(true);
+    }
+  }, [serverErrors]);
+  useEffect(() => {
+    if (isLogged) {
       setConfirmLoading(false);
       handleCancel();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRegistrating]);
+  }, [isLogged]);
 
   return (
     <>
@@ -81,6 +89,7 @@ const LoginModal = ({ handleCancel, isOpen }) => {
         okText={signType === 'sign-up' ? 'Зарегестрироваться' : 'Войти'}
         cancelText="Закрыть"
       >
+        {serverErrors && <div className={styles['server-errors']}>{serverErrors}</div>}
         {signType === 'sign-up' ? (
           <SignUp register={signUp} errors={signUpErrors} />
         ) : (

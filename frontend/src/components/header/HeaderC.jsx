@@ -1,15 +1,15 @@
-import { Layout, Input } from 'antd';
+import { Layout, Input, Popover } from 'antd';
 import { useRef, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useHistory, useLocation } from 'react-router-dom';
-import { unsetProductsInCart } from '../../store/reducers/cart/cartReducer';
 import LoginModal from '../login-modal/LoginModal';
 import styles from './header.module.scss';
 import returnExactQuery from '../../helpers/returnExactQuery';
-import setLoginModal from '../../store/reducers/login/actions';
+import { setLoginModal } from '../../store/reducers/login/actions';
 import { unsetUser } from '../../store/reducers/user/actions';
 import deleteAuthFromClient from '../../helpers/deleteAuthFromClient';
 import getTokenClient from '../../helpers/getTokenClient';
+import { unsetProductsInCart } from '../../store/reducers/cart/actions';
 
 const { Header } = Layout;
 
@@ -27,11 +27,6 @@ const HeaderC = () => {
     deleteAuthFromClient();
     dispatch(unsetUser());
     dispatch(unsetProductsInCart());
-  };
-  const logOutHideHandler = () => {
-    const classes = logOutRef.current.classList;
-    if (!classes.contains(styles.hidden)) classes.add(styles.hidden);
-    else classes.remove(styles.hidden);
   };
   const onSearch = () => {
     history.push(`/search?q=${value}`);
@@ -73,22 +68,22 @@ const HeaderC = () => {
             </NavLink>
           ) : null}
           {isLogged ? (
-            <button
-              ref={userRef}
-              onClick={logOutHideHandler}
-              type="button"
-              className={`${styles['sign-in']} ${styles.user} ${styles['hide-log-out']}`}
-            >
-              {name}
-              <button
-                onClick={logOutHandler}
-                type="button"
-                ref={logOutRef}
-                className={`${styles['log-out']} ${styles.hidden}`}
+            <>
+              <Popover
+                overlayInnerStyle={{ position: 'relative' }}
+                placement="bottom"
+                content={() => (
+                  <button onClick={logOutHandler} type="button" ref={logOutRef} className={styles['log-out']}>
+                    Log out
+                  </button>
+                )}
+                trigger="click"
               >
-                Log out
-              </button>
-            </button>
+                <button type="button" className={styles['sign-in']}>
+                  {name}
+                </button>
+              </Popover>
+            </>
           ) : (
             <button className={styles['sign-in']} type="button" onClick={() => dispatch(setLoginModal(true))}>
               Sign in
@@ -97,15 +92,7 @@ const HeaderC = () => {
           {getTokenClient() && (
             <NavLink activeClassName={styles.active} to="/cart" className={styles.cart}>
               Cart
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '0',
-                  right: '-15px',
-                }}
-              >
-                {products.reduce((acc, product) => product.count + acc, 0)}
-              </div>
+              <span className={styles['cart-count']}>{products.reduce((acc, product) => product.count + acc, 0)}</span>
             </NavLink>
           )}
           <LoginModal handleCancel={() => dispatch(setLoginModal(false))} isOpen={isModalOpen} />

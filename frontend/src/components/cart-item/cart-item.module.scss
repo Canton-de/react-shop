@@ -11,7 +11,7 @@
 }
 .title {
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: 20px;
   margin-left: 5px;
 }
 .layoutItem {
@@ -79,4 +79,18 @@
   position: absolute;
   top: -20px;
   right: 10px;
+}
+@media (max-width: 800px) {
+  .layoutItem {
+    flex-direction: column;
+  }
+  .cart-item {
+    margin-bottom: 15px;
+    height: fit-content;
+  }
+  .count {
+    position: static;
+    width: fit-content;
+    margin: 0 auto;
+  }
 }

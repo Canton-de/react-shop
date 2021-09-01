@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Layout } from 'antd';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -12,7 +11,7 @@ const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(authUser());
-  }, []);
+  }, [dispatch]);
   return (
     <div className="app">
       <Layout className="layout">

@@ -1,7 +1,4 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable consistent-return */
-/* eslint-disable no-nested-ternary */
-import { Button, Input, Spin, Pagination, InputNumber } from 'antd';
+import { Button, Input, Pagination, InputNumber } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router';
@@ -16,7 +13,7 @@ import Loader from '../loader/Loader';
 const { Search } = Input;
 
 const ProductList = () => {
-  const { products, sort, isLoading, count } = useSelector((state) => state.products);
+  const { products, isLoading, count } = useSelector((state) => state.products);
   const dispatch = useDispatch();
   const query = useLocation();
   const curSort = returnExactQuery(query.search, 'sort')?.[1];
