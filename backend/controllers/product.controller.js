@@ -3,6 +3,7 @@ const config = require('config');
 const productService = require('../services/product.service.js');
 const colors = require('colors');
 const User = require('../models/User');
+const { validationResult } = require('express-validator');
 
 class ProductController {
   async getProducts(req, res) {
@@ -10,7 +11,6 @@ class ProductController {
       const products = await Product.find({ category: req.params.category });
       if (!req.user) return res.send(products);
       const { id } = req.user;
-      // const productsWithUser = await productService.getProductWithUserCount(products, id);
       res.send(products);
     } catch (e) {
       console.log(`Error ${e}`.red.underline.bold);
@@ -100,6 +100,10 @@ class ProductController {
   }
   async addProductToDataBase(req, res) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
       if (!req.user) return res.status(403).send({ message: 'no token' });
       const { id } = req.user;
       const candidate = await User.findById(id);
@@ -107,11 +111,8 @@ class ProductController {
       if (candidate.type !== 'admin') {
         return res.status(401).send({ message: 'you dont have access' });
       }
-      const { file } = req.files;
-      const isFileArray = Array.isArray(file);
-      let images;
-      if (isFileArray) images = file.map((file) => file.name);
-      else images = [file.name];
+      const {files} = req
+      let images = Object.values(files).map((file) => file.name);
       const { name, description, category, brand, price, countInStock, previousPrice } = req.body;
       const product = new Product({
         name,
@@ -124,15 +125,19 @@ class ProductController {
         images,
       });
       await product.save();
-      if (isFileArray) {
-        for (let f of file) await f.mv(`${config.get('filePath')}\\${f.name}`);
-      } else await file.mv(`${config.get('filePath')}\\${file.name}`);
-
+      for(let i in files){
+        console.log(i);
+        await files[i].mv(`${config.get('filePath')}\\${files[i].name}`);
+      }
       res.send(product);
     } catch (e) {
       console.log(`Error ${e} qqqq`.red.underline.bold);
       res.status(500).send({ message: e });
     }
+  }
+  async getCategories(req,res) {
+    const categories = await Product.find({}, { category:1});
+    res.send([...new Set(categories.map(el=>el.category))].sort())
   }
 }
 
