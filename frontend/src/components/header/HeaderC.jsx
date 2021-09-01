@@ -14,7 +14,7 @@ import getTokenClient from '../../helpers/getTokenClient';
 const { Header } = Layout;
 
 const HeaderC = () => {
-  const { isLogged, name } = useSelector((store) => store.user);
+  const { isLogged, name, userType } = useSelector((store) => store.user);
   const { isModalOpen } = useSelector((store) => store.login);
   const { products } = useSelector((store) => store.cart);
   const dispatch = useDispatch();
@@ -53,7 +53,6 @@ const HeaderC = () => {
   useEffect(() => {
     if (query.pathname.slice(1) === 'search') setValue(returnExactQuery(query.search, 'q')?.[1]);
   }, [query.search, query.pathname]);
-
   return (
     <>
       <Header className={styles.header}>
@@ -68,6 +67,11 @@ const HeaderC = () => {
             onPressEnter={onSearch}
             value={value}
           />
+          {userType === 'admin' ? (
+            <NavLink to="/admin" className={styles.admin}>
+              admin
+            </NavLink>
+          ) : null}
           {isLogged ? (
             <button
               ref={userRef}

@@ -10,6 +10,11 @@ class ShopApi {
     const { data } = await axios.get(`/api/product/search/${category}${query}`);
     return data;
   }
+
+  async getCategories(){
+    const { data } = await axios.get('/api/product/categories');
+    return data
+  }
 }
 
 export default new ShopApi()

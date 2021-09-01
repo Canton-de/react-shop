@@ -19,6 +19,8 @@
     "class-methods-use-this": "off",
     "jsx-a11y/href-no-hash": ["off"],
     "jsx-a11y/anchor-is-valid": ["off"],
+    "no-param-reassign": ["off"],
+    "no-shadow": "off",
     "jsx-a11y/label-has-associated-control": [
       "error",
       {

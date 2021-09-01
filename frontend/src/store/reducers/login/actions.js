@@ -9,11 +9,12 @@ export const loginUser = (data) => async (dispatch) => {
   try {
     dispatch(userRegistrating(true));
     const {
-      user: { email, name, _id},
-      token,cart
+      user: { email, name, _id, type: userType },
+      token,
+      cart,
     } = await userApi.loginUser(data);
     localStorage.setItem('token', token);
-    dispatch(setUser({ email, name, _id }));
+    dispatch(setUser({ email, name, _id, userType }));
     dispatch(setProductsInCart(cart.products));
     dispatch(userRegistrating(false));
   } catch (e) {

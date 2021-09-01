@@ -41,7 +41,7 @@ const CartItem = ({ product }) => {
             </Link>
           </div>
           <div className={styles.count}>
-            <div>{makeSeparatedPrice(product.price)} *</div>
+            <div>{makeSeparatedPrice(product.price)} x</div>
             <button disabled={cartFetching} onClick={removeFromCartHandler} className={styles.minus} type="button">
               -
             </button>
@@ -49,11 +49,14 @@ const CartItem = ({ product }) => {
             <button disabled={cartFetching} onClick={addToCartHandler} className={styles.plus} type="button">
               +
             </button>
+            =<div className={styles['full-price']}>{makeSeparatedPrice(product.count * product.price)} Р</div>
           </div>
           <div className={styles['buy-wrapper']}>
-            <div className={styles['current-price']}>{makeSeparatedPrice(product.count * product.price)} Р</div>
+            <div className={styles['current-price']}>{makeSeparatedPrice(product.price)} Р</div>
           </div>
-          <div className={styles['previous-price']}>{product.previousPrice ? `${product.previousPrice} Р` : null}</div>
+          <div className={styles['previous-price']}>
+            {product.previousPrice ? `${makeSeparatedPrice(product.previousPrice)} Р` : null}
+          </div>
         </div>
       </Card>
     </>

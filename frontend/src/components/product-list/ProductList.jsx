@@ -5,17 +5,15 @@ import { Button, Input, Spin, Pagination, InputNumber } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router';
-import { SyncOutlined } from '@ant-design/icons';
 import ProductItem from '../product-item/ProductItem';
 import { loadProducts } from '../../store/reducers/products/actions';
 import styles from './product-list.module.scss';
 
 import changeQuery from '../../helpers/changeQuery';
 import returnExactQuery from '../../helpers/returnExactQuery';
+import Loader from '../loader/Loader';
 
 const { Search } = Input;
-
-const antIcon = <SyncOutlined style={{ fontSize: 60 }} spin />;
 
 const ProductList = () => {
   const { products, sort, isLoading, count } = useSelector((state) => state.products);
@@ -112,7 +110,7 @@ const ProductList = () => {
             </Button>
           </div>
           {isLoading ? (
-            <Spin indicator={antIcon} className={styles.spin} />
+            <Loader />
           ) : !products.length ? (
             <div>Товаров по заданнаму запросу не найдено</div>
           ) : (

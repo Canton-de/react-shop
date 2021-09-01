@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import shopApi from '../../api/shopApi';
 import styles from './categories.module.scss';
 
-const serverCategories = ['electronic', 'qwe'];
-
 const Categories = () => {
-  const [categories, setCategories] = useState(serverCategories);
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    shopApi.getCategories().then((data) => setCategories(data));
+  }, []);
   return (
     <div className={styles.categories}>
       {categories.map((category) => (

@@ -1,36 +1,37 @@
-import { Button, Carousel } from 'antd';
+import { Button, Carousel, Spin } from 'antd';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import shopApi from '../../api/shopApi';
 import ProductItem from '../product-item/ProductItem';
 import styles from './home-page.module.scss';
+import Loader from '../loader/Loader';
 
-const contentStyle = {
-  height: '50vh',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79',
-};
 const HomePage = () => {
   const [bestProducts, setBestProducts] = useState([]);
+  const [isProductsLoading, setIsProductsLoading] = useState(true);
   useEffect(() => {
     (async function l() {
       const curBestProducts = await shopApi.getBestProducts();
       setBestProducts(curBestProducts);
+      setIsProductsLoading(false);
     })();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
-      <div>Лучшие продукты:</div>
-      <Carousel autoplay pauseOnHover={false} pauseOnDotsHover speed="800" autoplaySpeed={2000}>
-        {bestProducts.map((el) => (
-          <ProductItem product={el} />
-        ))}
-      </Carousel>
-      <Link to="/categories">Категории</Link>
+      <div className={styles['best-products']}>Лучшие продукты</div>
+      {isProductsLoading ? (
+        <Loader />
+      ) : (
+        <Carousel autoplay pauseOnHover={false} pauseOnDotsHover speed="800" autoplaySpeed={2000}>
+          {bestProducts.map((el) => (
+            <ProductItem product={el} />
+          ))}
+        </Carousel>
+      )}
+      <Link className={styles.categories} to="/categories">
+        Категории
+      </Link>
     </>
   );
 };

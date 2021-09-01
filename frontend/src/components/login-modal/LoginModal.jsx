@@ -86,6 +86,8 @@ const LoginModal = ({ handleCancel, isOpen }) => {
         ) : (
           <SignIn register={signIn} errors={signInErrors} />
         )}
+        <div>Admin login: admin@mail.ru</div>
+        <div>Admin password: admin</div>
       </Modal>
     </>
   );

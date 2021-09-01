@@ -4,8 +4,8 @@ const initialState = {
     isLogged: false,
     email: null,
     name: null,
-    id: null,
-    type:null   
+    _id: null,
+    userType:null   
 }
 
 
@@ -15,7 +15,7 @@ const userReducer = (state = initialState,action) => {
       case SET_USER:
         return { ...state, isLogged: true, ...action.payload };
       case UNSET_USER:
-        return {...state,isLogged:false,email:null,name:null,id:null}
+        return { ...state, isLogged: false, email: null, name: null, _id: null, userType: null };
       default:
         return state;
     }

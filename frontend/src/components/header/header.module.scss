@@ -94,7 +94,10 @@
   display: none;
 }
 .search {
-  position: absolute;
+  position: relative;
   width: 20%;
-  left: 20%;
+  left: 0%;
+}
+.admin {
+  margin-left: 30px;
 }

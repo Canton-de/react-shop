@@ -27,9 +27,9 @@ const setServerErrors = () => ({ type: SET_SERVER_ERRORS });
 export const registerUser = data => async (dispatch) => {
     try{
         dispatch(userRegistrating(true));
-        const {user:{email,name,_id,cart},token} = await userApi.registerUser(data)
+        const {user:{email,name,_id,cart,type:userType},token} = await userApi.registerUser(data)
         localStorage.setItem('token',token)
-        dispatch(setUser({email,name,_id}))
+        dispatch(setUser({ email, name, _id, userType }));
         dispatch(setProductsInCart(cart.products));
         dispatch(userRegistrating(false))
     }catch(e) {
