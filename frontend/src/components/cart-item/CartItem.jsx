@@ -7,7 +7,6 @@ import cutString from '../../helpers/cutString';
 import makeSeparatedPrice from '../../helpers/makeSeparatedPrice';
 import cartApi from '../../api/cartApi';
 import { setProductsInCart } from '../../store/reducers/cart/actions';
-import serverUrl from '../../helpers/serverUrl';
 
 function error() {
   Modal.error({
@@ -41,7 +40,7 @@ const CartItem = ({ product }) => {
           <div style={{ width: 200 }}>
             <Carousel style={{ width: 200 }}>
               <div className={styles['slider-image']}>
-                <img height="160px" src={`${serverUrl()}/images/${product.image}`} alt="product" />
+                <img height="160px" src={product.image} alt="product" />
               </div>
             </Carousel>
           </div>

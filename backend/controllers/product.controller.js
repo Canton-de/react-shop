@@ -3,6 +3,7 @@ const colors = require('colors');
 const User = require('../models/User');
 const { validationResult } = require('express-validator');
 const path = require('path');
+const cloudinary = require('../cloudinaryConfig');
 
 class ProductController {
   async getProducts(req, res) {
@@ -99,9 +100,11 @@ class ProductController {
   }
   async addProductToDataBase(req, res) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+      const { images, name, description, category, brand, price, countInStock, previousPrice } = req.body
+      const imageLinks = []
+      for(let image of images) {
+        const result = await cloudinary.uploader.upload(image);
+        imageLinks.push(result.url)
       }
       if (!req.user) return res.status(403).send({ message: 'no token' });
       const { id } = req.user;
@@ -110,16 +113,10 @@ class ProductController {
       if (candidate.type !== 'admin') {
         return res.status(401).send({ message: 'you dont have access' });
       }
-      const {files} = req
-      let images = Object.values(files).map((file) => file.name);
-      const { name, description, category, brand, price, countInStock,previousPrice } = req.body;
-      const newObject = { name, description, category, brand, price, countInStock, images}
-      if(+previousPrice!==0) newObject.previousPrice = previousPrice
+      const newObject = { name, description, category, brand, price, countInStock, images:imageLinks}
+      if(+previousPrice !== 0) newObject.previousPrice = previousPrice
       const product = new Product(newObject);
       await product.save();
-      for(let i in files){
-        await files[i].mv(path.resolve(req.filePath, files[i].name));
-      }
       res.send(product);
     } catch (e) {
       console.log(`Error ${e}`.red.underline.bold);

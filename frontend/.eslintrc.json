@@ -24,6 +24,7 @@
     "no-underscore-dangle": "off",
     "no-nested-ternary": "off",
     "consistent-return": "off",
+    "no-await-in-loop": "off",
     "jsx-a11y/label-has-associated-control": [
       "error",
       {

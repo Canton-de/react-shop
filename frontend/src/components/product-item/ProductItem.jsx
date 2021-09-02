@@ -8,7 +8,6 @@ import makeSeparatedPrice from '../../helpers/makeSeparatedPrice';
 import cartApi from '../../api/cartApi';
 import { setLoginModal } from '../../store/reducers/login/actions';
 import { setProductsInCart } from '../../store/reducers/cart/actions';
-import serverUrl from '../../helpers/serverUrl';
 
 const ProductItem = ({ product }) => {
   const { products: productsInCart } = useSelector((state) => state.cart);
@@ -32,7 +31,7 @@ const ProductItem = ({ product }) => {
             <Carousel style={{ width: 200 }}>
               {product.images.map((image) => (
                 <div key={image} className={styles['slider-image']}>
-                  <img height="160px" src={`${serverUrl()}/images/${image}`} alt="product" />
+                  <img height="160px" src={image} alt="product" />
                 </div>
               ))}
             </Carousel>

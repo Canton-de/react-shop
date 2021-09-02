@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styles from './rate-c.module.scss';
 import { setLoginModal } from '../../store/reducers/login/actions';
-import serverUrl from '../../helpers/serverUrl';
 
 const RateC = ({ rating, reviewsCount, productId, ...rest }) => {
   const [curRating, setCurRating] = useState(rating);
@@ -14,7 +13,7 @@ const RateC = ({ rating, reviewsCount, productId, ...rest }) => {
     if (!localStorage.getItem('token')) dispatch(setLoginModal(true));
     else {
       const { data } = await axios.put(
-        `${serverUrl()}api/product/rating/${productId}`,
+        `/api/product/rating/${productId}`,
         {
           rating: ratingq,
         },

@@ -2,7 +2,7 @@ const Router = require('express')
 const router = new Router()
 const productController = require('../controllers/product.controller');
 const productCartController = require('../controllers/productCart.controller');
-const { check } = require('express-validator');
+const { body } = require('express-validator');
 const authMiddleware = require('../middlewares/auth.middleware')
 
 router.get('/categories/:category', authMiddleware, productController.getProducts);
@@ -11,12 +11,6 @@ router.put('/rating/:id',authMiddleware, productController.rateProduct)
 router.get('/cart', authMiddleware, productCartController.getProductsInCart);
 router.post(
   '/new',
-  [
-    check('name', 'name must be 1-15 length').isLength({ min: 1, max: 15 }),
-    check('description', 'description must be 1-50 length').isLength({ min: 1, max: 250 }),
-    check('brand', 'brand must be 1-15 length').isLength({ min: 1, max: 25 }),
-    check('category', 'category must be 1-15 length').isLength({ min: 1, max: 25 }),
-  ],
   authMiddleware,
   productController.addProductToDataBase
 );

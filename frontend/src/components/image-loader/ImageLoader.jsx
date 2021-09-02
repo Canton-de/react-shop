@@ -2,15 +2,6 @@ import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import React from 'react';
 
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
-}
-
 class ImageLoader extends React.Component {
   state = {
     previewVisible: false,
@@ -22,6 +13,7 @@ class ImageLoader extends React.Component {
 
   handlePreview = async (file) => {
     if (!file.url && !file.preview) {
+      const { getBase64 } = this.props;
       file.preview = await getBase64(file.originFileObj);
     }
 

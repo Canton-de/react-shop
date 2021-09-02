@@ -45,7 +45,7 @@ const Product = () => {
                 {curProduct.images?.map((image) => (
                   <>
                     <div className={styles['slider-image-wrapper']}>
-                      <img className={styles['slider-image']} src={`${serverUrl()}/images/${image}`} alt="product" />
+                      <img className={styles['slider-image']} src={image} alt="product" />
                     </div>
                   </>
                 ))}

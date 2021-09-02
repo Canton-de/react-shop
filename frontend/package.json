@@ -1,4 +1,5 @@
 {
+  "proxy": "https://obscure-shore-98531.herokuapp.com/",
   "name": "react-shop",
   "version": "0.1.0",
   "private": true,

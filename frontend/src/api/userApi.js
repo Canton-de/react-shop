@@ -1,15 +1,10 @@
 import axios from 'axios'
 import getTokenClient from "../helpers/getTokenClient";
-import serverUrl from "../helpers/serverUrl";
-
-const instance = axios.create({
-  baseURL: serverUrl(),
-});
 
 class UserApi {
   async registerUser(regData) {
     try{
-      const { data } = await instance.post('/api/auth/sign-up', regData);
+      const { data } = await axios.post('/api/auth/sign-up', regData);
       return data
     }catch(e){
       throw(e?.response?.data?.message)
@@ -18,7 +13,7 @@ class UserApi {
 
   async loginUser(regData) {
     try {
-      const { data } = await instance.post('/api/auth/sign-in', regData);
+      const { data } = await axios.post('/api/auth/sign-in', regData);
     return data;
     } catch (e) {
       throw e?.response?.data?.message;
@@ -26,7 +21,7 @@ class UserApi {
   }
 
   async authUser() {
-    const { data } = await instance.get('/api/auth/login', {
+    const { data } = await axios.get('/api/auth/login', {
       headers: {
         Authorization: `Token ${getTokenClient()}`,
       },

@@ -17,6 +17,15 @@ function warning() {
   });
 }
 
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
 function error(errors) {
   Modal.error({
     title: 'Error message',
@@ -73,12 +82,18 @@ const Admin = () => {
     } else {
       const loadProduct = async () => {
         try {
+          const images = [];
+          for (const file of fileList) {
+            const image64Base = await getBase64(file.originFileObj);
+            images.push(image64Base);
+          }
           setIsLoading(true);
-          await adminApi.addToDataBase(data, fileList);
+          await adminApi.addToDataBase(data, images);
           reset();
           setFileList([]);
           success();
         } catch (e) {
+          console.log(e);
           error(e.response?.data?.errors?.map((err) => err.msg));
         } finally {
           setIsLoading(false);
@@ -94,7 +109,7 @@ const Admin = () => {
   return (
     <form>
       <div>Добавить товар</div>
-      <ImageLoader fileList={fileList} handleChange={handleChange} />
+      <ImageLoader getBase64={getBase64} fileList={fileList} handleChange={handleChange} />
       <div className={styles.form}>
         <InputUseForm name="name" register={register} error={errors.name} type="text" />
         <InputUseForm name="description" register={register} error={errors.description} type="text" />
